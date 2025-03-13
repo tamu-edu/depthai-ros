@@ -8,3 +8,7 @@
       i_subpixel: true
       i_right_rect_publish_topic: true
       i_right_rect_synced: false
+    left:
+      i_publish_topic: true
+    right:
+      i_publish_topic: true

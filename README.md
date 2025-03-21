@@ -17,4 +17,9 @@ git push origin humble
 Use this command in the scenario that you have a unmanaged switch -> camera, laptop. This will temporarily assign a network interface to the ethernet port of your laptop. It assigns an IP address of `169.254.1.100` and accepts all devices with address of `169.254.x.x`, which works because the camera is automatically assigned an IP of `169.254.1.222` if nothing is assingned by a router. It will not persist across reboots.
 ```bash
 sudo ip addr add 169.254.1.100/16 dev eno0
+ping 169.254.1.222
+```
+# View camera outside of Docker
+```bash
+python3 -m depthai_viewer
 ```

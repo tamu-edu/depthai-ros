@@ -23,3 +23,8 @@ ping 169.254.1.222
 ```bash
 python3 -m depthai_viewer
 ```
+# Launch ROS2 Camera Node
+In the devcontainer, run:
+```bash
+ros2 launch depthai_ros_driver camera.launch.py
+```

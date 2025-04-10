@@ -7,6 +7,7 @@ Help()
     echo "-s [1]   Set to 1 to build sequentially (longer, but saves RAM & CPU)"
     echo "-r [0]  Set to 1 to build in Debug mode. (RelWithDebInfo)"
     echo "-m [0]   Set to 1 to build with --merge-install option."
+    echo "-e [0]   Set to 0 to not exit early and build all packages"
     echo
 }
 
@@ -15,7 +16,8 @@ release=0
 merge=0
 build_type=Release
 install_type=symlink-install
-while getopts ":h:s:r:m:" option; do
+exit_early=0
+while getopts ":h:s:r:m:e:" option; do
    case $option in
       h) # display Help
          Help
@@ -26,6 +28,8 @@ while getopts ":h:s:r:m:" option; do
          release=$OPTARG;;
       m) # Install type
          merge=$OPTARG;;
+      e) # Exit early status
+         exit_early=$OPTARG;;
      \?) # Invalid option
          echo "Error: Invalid option"
          exit;;
@@ -41,7 +45,20 @@ if [ "$merge" == 1 ]
 then
     install_type="merge-install"
 fi
+
 echo "Build type: $build_type, Install_type: $install_type"
+
+if [ "$exit_early" == 1 ]
+then
+    echo "Build cv bridge" && \
+    colcon build \
+        --$install_type \
+        --cmake-args -DCMAKE_BUILD_TYPE=$build_type \
+        --cmake-args -DBUILD_TESTING=OFF \
+        --packages-select cv_bridge
+    exit 0
+fi
+
 if [ "$sequential" == 1 ]
 then
     echo "Sequential build" && \
@@ -58,5 +75,8 @@ else
     colcon build \
     --$install_type \
     --cmake-args -DCMAKE_BUILD_TYPE=$build_type \
-    --cmake-args -DBUILD_TESTING=OFF --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE=ON --cmake-args -DBUILD_SHARED_LIBS=ON
+    --cmake-args -DBUILD_TESTING=OFF \
+    --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+    --cmake-args -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+    --cmake-args -DBUILD_SHARED_LIBS=ON
 fi

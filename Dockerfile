@@ -1,6 +1,6 @@
 ARG ROS_DISTRO=humble
 FROM ros:${ROS_DISTRO}-ros-base
-ARG USE_RVIZ
+ARG USE_RVIZ=1
 ARG BUILD_SEQUENTIAL=0
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
